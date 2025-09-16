@@ -1,44 +1,47 @@
-import { useState } from 'react';
-import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
-import Dashboard from './components/Dashboard';
-import './App.css';
+import React from 'react';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import PdfViewerPage from './pages/PdfViewerPage';
 
 export default function App() {
-  const [token, setToken] = useState('');
-  const [view, setView] = useState('login');
-  const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
-  const handleLogin = (token, email) => {
-    setToken(token);
-    setUserEmail(email);
-    setView('dashboard');
-    localStorage.setItem('jwt', token);
-    localStorage.setItem('email', email);
-  };
-
-  const handleLogout = () => {
-    setToken('');
-    setUserEmail('');
-    setView('login');
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('email');
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
   return (
-    <div className="container">
-      <h1>PDF Annotator</h1>
-      {!token && (
-        <div>
-          <div className="tab">
-            <button onClick={() => setView('login')}>Login</button>
-            <button onClick={() => setView('register')}>Register</button>
-          </div>
-          {view === 'login' && <LoginForm onLogin={handleLogin} />}
-          {view === 'register' && <RegisterForm onRegister={() => setView('login')} />}
-        </div>
-      )}
-      {token && <Dashboard onLogout={handleLogout} email={userEmail} />}
+    <div className="app">
+      <header className="topbar">
+        <h1 className="logo">PDF Annotator</h1>
+        <nav>
+          {token ? (
+            <>
+              <Link to="/">Library</Link>
+              <button onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
+        </nav>
+      </header>
+
+      <main className="container">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/file/:uuid" element={<PdfViewerPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </main>
     </div>
   );
 }

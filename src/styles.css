@@ -1,0 +1,12 @@
+body { font-family: Inter, system-ui, sans-serif; margin:0; }
+.topbar { display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:#0b5fff; color:white; }
+.logo { margin:0; }
+.container { padding:20px; }
+button { cursor:pointer; }
+.library-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+.card { padding:12px; border:1px solid #ddd; border-radius:8px; background:#fff; }
+.viewer { display:flex; gap:12px; }
+.sidebar { width:300px; }
+.pdf-canvas { position:relative; }
+.highlight { position:absolute; background:rgba(255, 255, 0, 0.45); pointer-events:none; }
+.controls { margin-bottom:12px; }
